@@ -114,6 +114,27 @@ def main ():
     data, poptsSiPIN, pcovsSiPIN, LambdaSiPIN, ResolutionSiPIN = analyse (1830, 1820, "am_241 Si-PIN.mca")
     data, poptsCdTe, pcovsCdTe, LambdaCdTe, ResolutionCdTe = analyse (1620, 1600, "am_241 CdTe.mca")
 
+    # Hauteurs relatives entre le pic 1 et le pic 3 pour les deux détecteurs
+    A1SiPIN = poptsSiPIN[0][0]
+    sigma2A1SiPIN = pcovsSiPIN[0][0][0]
+    A3SiPIN = poptsSiPIN[2][0]
+    sigma2A3SiPIN = pcovsSiPIN[2][0][0]
+
+    alphaSiPIN = A1SiPIN/A3SiPIN
+    sigmaAlphaSiPIN = alphaSiPIN * np.sqrt (sigma2A1SiPIN/A1SiPIN**2 + sigma2A3SiPIN/A3SiPIN**2)
+
+    A1CdTe = poptsCdTe[0][0]
+    sigma2A1CdTe = pcovsCdTe[0][0][0]
+    A3CdTe = poptsCdTe[2][0]
+    sigma2A3CdTe = pcovsCdTe[2][0][0]
+
+    alphaCdTe = A1CdTe/A3CdTe
+    sigmaAlphaCdTe = alphaCdTe * np.sqrt (sigma2A1CdTe/A1CdTe**2 + sigma2A3CdTe/A3CdTe**2)
+
+    print ("Comparaison de alpha:")
+    print (f"\tSi-PIN: {alphaSiPIN:.5f} ± {3*sigmaAlphaSiPIN:.5f}")
+    print (f"\tCdTe:   {alphaCdTe:.5f} ± {3*sigmaAlphaCdTe:.5f}")
+
     # On divise le compte de chaque pic par la probabilité d'émission du
     # pic pour normaliser les résultats, de plus, on multiplie le compte
     # du détecteur CdTe par 1/(1-0.0108) pour compenser le temps mort de 1.08%
@@ -131,7 +152,7 @@ def main ():
     mpl.errorbar (raies, [x/max (effCdTe) for x in effSiPIN], yerr=[3*x/max (effCdTe) for x in sigmaeffSiPIN], fmt=".", capsize=4, label="Si-PIN")
     mpl.errorbar (raies, [x/max (effCdTe) for x in effCdTe], yerr=[3*x/max (effCdTe) for x in sigmaeffCdTe], fmt="^", markersize=4, capsize=4, label="CdTe")
     mpl.xlabel ("Énergie [keV]")
-    mpl.ylabel ("Efficacité relative")
+    mpl.ylabel ("Efficacité relative normalisée")
     mpl.xscale ("log")
     mpl.yscale ("log")
     mpl.minorticks_on ()
