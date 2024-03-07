@@ -145,8 +145,8 @@ def main ():
     effSiPIN = [lambda_i/c for lambda_i, c in zip (LambdaSiPIN, coeffs)]
     sigmaeffSiPIN = [lambda_i/c * np.sqrt (1/lambda_i + sigmac**2/c**2) for lambda_i, c, sigmac in zip (LambdaSiPIN, coeffs, sigmacoeffs)]
 
-    effCdTe = [lambda_i/(c*(1-0.0108)) for lambda_i, c in zip (LambdaCdTe, coeffs)]
-    sigmaeffCdTe = [lambda_i/(c*(1-0.0108)) * np.sqrt (1/lambda_i + sigmac**2/c**2) for lambda_i, c, sigmac in zip (LambdaCdTe, coeffs, sigmacoeffs)]
+    effCdTe = [2/3 * lambda_i/(c*(1-0.0108)) for lambda_i, c in zip (LambdaCdTe, coeffs)]
+    sigmaeffCdTe = [2/3 * lambda_i/(c*(1-0.0108)) * np.sqrt (1/lambda_i + sigmac**2/c**2) for lambda_i, c, sigmac in zip (LambdaCdTe, coeffs, sigmacoeffs)]
 
     mpl.figure (layout="constrained", figsize=(4, 3))
     mpl.errorbar (raies, [x/max (effCdTe) for x in effSiPIN], yerr=[3*x/max (effCdTe) for x in sigmaeffSiPIN], fmt=".", capsize=4, label="Si-PIN")
