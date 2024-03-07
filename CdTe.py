@@ -10,9 +10,9 @@ def main ():
     print ("Résolutions relatives:")
     [print (f"\tPic {i+1}: {res[0]} ± {res[1]}") for res, i in zip (Resolution, range (3))]
 
-    cannaux = np.linspace (1, 8192, 8192, dtype=int)
+    canaux = np.linspace (1, 8192, 8192, dtype=int)
     mpl.figure (layout="constrained")
-    mpl.plot (cannaux, data, ".", label="Compte")
+    mpl.plot (canaux, data, ".", label="Compte")
     linestyle = ["-", "--", "-."]
     for i in range (3):
         popt = popts[i]
@@ -34,9 +34,9 @@ def main ():
         p = mpl.plot (x, gauss (x), linestyle[i], label=fr"Pic {i+1}, $A = {A:.3}\pm{sigmaA:.1}$, $\mu = {mu:.5}\pm{sigmaMu:.1}$, $\sigma = {sigma:.3}\pm{sigmaSigma:.1}$")
         mpl.fill_between (x, gaussMin (x), gaussMax (x), alpha=0.3, color=p[0].get_c ())
 
-    mpl.xlabel ("Cannal")
+    mpl.xlabel ("Canal")
     mpl.ylabel ("Compte")
-    mpl.title ("Régressions de compte en fonction du cannal pour les photopics\nde 13.95, 17.74 et 59.54 keV pour le 241Am avec un détecteur CdTe.")
+    mpl.title ("Régressions de compte en fonction du canal pour les photopics\nde 13.95, 17.74 et 59.54 keV pour le 241Am avec un détecteur CdTe.")
     mpl.minorticks_on ()
     mpl.tick_params (which="both", direction="in")
     mpl.legend ()

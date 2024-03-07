@@ -20,7 +20,7 @@ def analyse (cutoff: int, nouveauGauche: int, fichier: str) -> tuple[np.ndarray[
         fichier: Nom du fichier à analyser
 
     Returns:
-        data: Array numpy contenant le compte en fonction du cannal, ne contient
+        data: Array numpy contenant le compte en fonction du canal, ne contient
             que des données non nulles où sont les photopics
         popts: Liste des paramètres optimaux pour les gaussiennes des photopics
         pcovs: Liste des matrices de covariances pour les paramètres optimaux
@@ -28,7 +28,7 @@ def analyse (cutoff: int, nouveauGauche: int, fichier: str) -> tuple[np.ndarray[
         Resolution: Liste de la résolution relative et de sont incertitude
             pour chaque photopic
     """
-    # Comptes des cannaux
+    # Comptes des canaux
     data: np.ndarray[int] = np.loadtxt (fichier, skiprows=16, max_rows=8192, dtype=int)
     # Régions d'intérêt
     roi: np.ndarray[np.ndarray[int]] = np.loadtxt (fichier, skiprows=12, max_rows=3, dtype=int)
@@ -60,7 +60,7 @@ def analyse (cutoff: int, nouveauGauche: int, fichier: str) -> tuple[np.ndarray[
             x: np.ndarray[int] = np.linspace (gauche, cutoff, largeur+1, dtype=int)
             rmpopt, rmpcov = curve_fit (gaussienne, x, data[gauche:cutoff+1], p0=(amplitude, centre, largeur/5))
 
-            # On définit la gaussienne à retirer et on retire sa valeur de tous les cannaux
+            # On définit la gaussienne à retirer et on retire sa valeur de tous les canaux
             deGauss = partial (gaussienne, A=rmpopt[0], mu=rmpopt[1], sigma=rmpopt[2])
             x: np.ndarray[int] = np.linspace (gauche, droite, droite-gauche+1, dtype=int)
             data[gauche:droite+1] -= np.rint (deGauss (x)).astype (int)
@@ -85,7 +85,7 @@ def analyse (cutoff: int, nouveauGauche: int, fichier: str) -> tuple[np.ndarray[
         # Bornes pour l'optimisation des paramètres
         bounds: tuple[list[float]] = ([0, gauche, 1], [2*intervalle.max (), droite, largeur])
         # Fit du photopic, l'écart type sur le compte est obtenu en tenant compte que la variance
-        # de la distribution de poisson est lambda, qui est estimé par le compte du cannal
+        # de la distribution de poisson est lambda, qui est estimé par le compte du canal
         popt, pcov = curve_fit (gaussienne, x, intervalle, p0=(intervalle.max (), centre, largeur/5), sigma=np.sqrt(intervalle))
         popts.append (popt)
         pcovs.append (pcov)
